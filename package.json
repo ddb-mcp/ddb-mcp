@@ -1,6 +1,6 @@
 {
   "name": "ddb-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "D&D Beyond MCP Server with Google Auth",
   "type": "module",
   "main": "dist/index.js",
