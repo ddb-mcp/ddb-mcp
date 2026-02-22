@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. 1.0.1)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Bump version
+        run: npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+      - name: Build
+        run: npm run build
+
+      - name: Pack
+        run: npm pack
+
+      - name: Commit, tag and push
+        run: |
+          git config user.name "ddb-mcp-admin"
+          git config user.email "ddb-mcp-admin@users.noreply.github.com"
+          git add package.json package-lock.json dist/
+          git commit -m "Release v${{ github.event.inputs.version }}"
+          git tag "v${{ github.event.inputs.version }}"
+          git push origin main --follow-tags
+
+      - name: Create GitHub release
+        run: |
+          gh release create "v${{ github.event.inputs.version }}" \
+            "ddb-mcp-${{ github.event.inputs.version }}.tgz" \
+            --title "v${{ github.event.inputs.version }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
