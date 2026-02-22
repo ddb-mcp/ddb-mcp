@@ -26,32 +26,44 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that gi
 
 ## Installation
 
-### 1. Clone and install dependencies
+### Option A — Install directly from GitHub (recommended)
 
 ```bash
-git clone https://github.com/ddb-mcp/ddb-mcp.git
-cd ddb-mcp
-npm install
+npm install -g github:ddb-mcp/ddb-mcp
 ```
 
-### 2. Install the Playwright browser
+This clones the repo, installs dependencies, and builds automatically. Then install the browser:
 
 ```bash
 npx playwright install chromium
 ```
 
-### 3. Build the server
+Find the install path and register with Claude Code:
 
 ```bash
-npm run build
+npm root -g
+# outputs something like /usr/local/lib/node_modules
 ```
 
-### 4. Register the MCP server with Claude Code
+```bash
+claude mcp add dndbeyond node /usr/local/lib/node_modules/ddb-mcp/dist/index.js
+```
 
-Add the server to your Claude Code MCP configuration. Run:
+---
+
+### Option B — Clone and build manually
 
 ```bash
-claude mcp add ddb-mcp node /absolute/path/to/ddb-mcp/dist/index.js
+git clone https://github.com/ddb-mcp/ddb-mcp.git
+cd ddb-mcp
+npm install
+npx playwright install chromium
+```
+
+Register with Claude Code:
+
+```bash
+claude mcp add dndbeyond node /absolute/path/to/ddb-mcp/dist/index.js
 ```
 
 Or edit `~/.claude/settings.json` manually:
@@ -66,8 +78,6 @@ Or edit `~/.claude/settings.json` manually:
   }
 }
 ```
-
-Replace `/absolute/path/to/ddb-mcp` with the actual path where you cloned the repo.
 
 ## Usage
 
