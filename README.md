@@ -163,6 +163,22 @@ To read a specific chapter, pass the chapter path after the book slug:
 ddb_read_book("dnd/phb-2024", "character-classes/barbarian")
 ```
 
+## Upgrading
+
+To upgrade to the latest release, run the install command again — npm will overwrite the existing installation:
+
+```bash
+npm install -g "https://github.com/ddb-mcp/ddb-mcp/archive/refs/heads/main.tar.gz"
+```
+
+To install a specific tagged version:
+
+```bash
+npm install -g "https://github.com/ddb-mcp/ddb-mcp/archive/refs/tags/v1.0.2.tar.gz"
+```
+
+Then restart Claude Code and run `/mcp` to reconnect the server.
+
 ## Session storage
 
 Your session is saved to `~/.config/ddb-mcp/session.json`. This file contains browser cookies and local storage from your D&D Beyond login. Keep this file private — it grants access to your account.
