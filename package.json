@@ -8,7 +8,6 @@
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
     "build": "tsc",
-    "prepare": "node ./node_modules/typescript/bin/tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit"
