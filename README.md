@@ -29,10 +29,10 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that gi
 ### Option A — Install directly from GitHub (recommended)
 
 ```bash
-npm install -g github:ddb-mcp/ddb-mcp
+npm install -g "https://github.com/ddb-mcp/ddb-mcp/archive/refs/heads/main.tar.gz"
 ```
 
-This clones the repo, installs dependencies, and builds automatically. Then install the browser:
+Then install the browser:
 
 ```bash
 npx playwright install chromium
