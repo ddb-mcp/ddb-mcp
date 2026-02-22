@@ -1,5 +1,5 @@
 import { BrowserContext } from "playwright";
-import { getPage, isLoggedIn } from "../browser.js";
+import { getPage } from "../browser.js";
 
 export type SearchCategory = "spells" | "monsters" | "items" | "races" | "classes" | "feats" | "all";
 

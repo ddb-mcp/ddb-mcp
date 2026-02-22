@@ -1,10 +1,8 @@
 import { BrowserContext } from "playwright";
-import { getPage, isLoggedIn, saveSession } from "../browser.js";
+import { getPage, isLoggedIn } from "../browser.js";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
-
-const CHARACTER_API = "https://character-service.dndbeyond.com/character/v5/character";
 
 export async function getCharacter(context: BrowserContext, characterId: string): Promise<string> {
   const page = await getPage(context);
