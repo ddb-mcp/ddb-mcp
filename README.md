@@ -16,8 +16,16 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that gi
 | `ddb_read_book` | Read content from an owned sourcebook, optionally by chapter slug. |
 | `ddb_search` | Search for spells, monsters, magic items, races, classes, or feats. |
 | `ddb_navigate` | Navigate to any D&D Beyond URL and return its text content. |
-| `ddb_interact` | Click, fill, or screenshot the currently loaded browser page. |
+| `ddb_interact` | Click, fill, select dropdown, run JavaScript, or screenshot the current page. |
 | `ddb_current_page` | Return the text content of whatever page is currently loaded. |
+| **Homebrew Creation** | |
+| `ddb_create_homebrew_item` | Create a homebrew magic item (name, rarity, type, attunement, description). |
+| `ddb_create_homebrew_spell` | Create a homebrew spell (level, school, components, range, duration, etc.). |
+| **Homebrew Editing** | |
+| `ddb_set_item_charges` | Set charges on an existing homebrew item (count, reset condition). |
+| `ddb_add_item_modifier` | Add a modifier to an item (bonus to spell attacks, save DC, AC, etc.). |
+| `ddb_add_item_spell` | Attach a spell to an item with optional charge cost and cast level. |
+| `ddb_list_homebrew` | List all your homebrew creations (items, spells, monsters, etc.). |
 
 ## Prerequisites
 
@@ -138,6 +146,69 @@ Read the Barbarian class section from the Player's Handbook
 ```
 Download the character data for Roland Stonehelm to my Downloads folder
 ```
+
+### Homebrew
+
+**Create a magic item:**
+```
+Create a homebrew magic item called "Frostbound Shackles" — Rare, Wondrous Item, requires attunement.
+It shoots ice chains that restrain creatures within 60 feet.
+```
+
+**Create a spell:**
+```
+Create a homebrew divination spell called "Bounty Hunter's Eye" — 1st level, Action,
+Self range, Concentration 1 minute. Reveals colored auras showing creature intent.
+```
+
+**Add charges to an item:**
+```
+Set 3 charges on the Frostbound Shackles that reset on a long rest
+```
+
+**Add modifiers to an item:**
+```
+Add a +2 bonus to Sorcerer Spell Attacks on the Bloodwell Vial
+```
+
+**Attach a spell to an item:**
+```
+Attach Disguise Self to the Bounty Hunter's Glasses as a permanent effect (no charges)
+```
+
+#### Description annotations
+
+Homebrew descriptions support D&D Beyond's annotation system for interactive content. Both `ddb_create_homebrew_item` and `ddb_create_homebrew_spell` include the full annotation reference in their tool descriptions. Here's a summary:
+
+**Rollable dice** — clickable dice rolls in the description:
+```
+[rollable]1d8 + 3 piercing;{"diceNotation":"1d8+3","rollType":"damage","rollAction":"Bite","rollDamageType":"Piercing"}[/rollable]
+```
+
+**Snippet codes** — dynamic character values that update automatically:
+```
+{{modifier:cha}}         — ability modifier
+{{savedc:wis}}           — 8 + proficiency + ability modifier
+{{spellattack:int}}      — spell attack bonus
+{{proficiency}}          — proficiency bonus
+{{characterlevel}}       — total character level
+{{maxhp}}                — maximum hit points
+{{8+proficiency+modifier:wis}}  — calculated spell save DC
+{{(classlevel/3)@rounddown}}    — with rounding
+{{proficiency#unsigned}}x per day  — display without +/- sign
+```
+
+**Tooltip tags** — hover references to D&D Beyond entries:
+```
+[spell]Fireball[/spell]
+[condition]restrained[/condition]
+[skill]Stealth[/skill]
+[monster]Banshee[/monster]
+[magicitem]Bag of Holding[/magicitem]
+[spell]Shield;cast Shield[/spell]    — custom display text
+```
+
+See the full reference in the tool descriptions for all rollType values, damage types, calculation modifiers, and 2024 (5.5e) tooltip syntax.
 
 ### Finding character and campaign IDs
 

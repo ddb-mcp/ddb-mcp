@@ -33,7 +33,7 @@ export async function navigate(context: BrowserContext, url: string): Promise<st
 
 export async function interact(
   context: BrowserContext,
-  action: "click" | "fill" | "screenshot",
+  action: "click" | "fill" | "screenshot" | "evaluate" | "select",
   selector: string,
   value?: string
 ): Promise<string> {
@@ -59,8 +59,25 @@ export async function interact(
       return `Screenshot saved to: ${screenshotPath}`;
     }
 
+    case "evaluate": {
+      // selector is used as the JavaScript code to evaluate on the page
+      const result = await page.evaluate((code) => {
+        const fn = new Function(code);
+        return fn();
+      }, selector);
+      return typeof result === "string" ? result : JSON.stringify(result, null, 2);
+    }
+
+    case "select": {
+      // Select an option in a <select> element. selector = CSS selector, value = option label or value.
+      if (value === undefined) throw new Error("'value' is required for select action.");
+      await page.locator(selector).first().selectOption({ label: value });
+      await page.waitForTimeout(500);
+      return `Selected '${value}' in ${selector}`;
+    }
+
     default:
-      throw new Error(`Unknown action: ${action}. Use 'click', 'fill', or 'screenshot'.`);
+      throw new Error(`Unknown action: ${action}. Use 'click', 'fill', 'screenshot', 'evaluate', or 'select'.`);
   }
 }
 
