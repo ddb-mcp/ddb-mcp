@@ -237,40 +237,38 @@ server.tool(
 
 // ─── ddb_list_library ─────────────────────────────────────────────────────────
 server.tool(
-  "ddb_list_library",
-  "List all books and sourcebooks you own in your D&D Beyond library.",
-  {},
-  async () => {
-    try {
-      const context = await getSharedContext();
-      const books = await listLibrary(context);
-      return { content: [{ type: "text", text: books }] };
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      return { content: [{ type: "text", text: `Failed to list library: ${msg}` }], isError: true };
-    }
-  }
-);
-
-// ─── ddb_read_book ────────────────────────────────────────────────────────────
-server.tool(
   "ddb_read_book",
-  "Read content from an owned D&D Beyond sourcebook. Provide the book slug (e.g. 'players-handbook') and optionally a chapter slug.",
+  "Read content from an owned D&D Beyond sourcebook. Without chapter_slug, returns the table of contents with each chapter's slug. Long chapters are paged: use section to start at a heading, and offset to continue.",
   {
     book_slug: z
       .string()
-      .describe("The book slug from the D&D Beyond URL (e.g. 'players-handbook', 'dungeon-masters-guide')"),
+      .describe("The book slug from ddb_list_library (e.g. 'dnd/phb-2024')"),
     chapter_slug: z
       .string()
       .optional()
-      .describe(
-        "Optional chapter or section slug (e.g. 'classes/ranger'). If omitted, returns the book's table of contents."
-      ),
+      .describe("Chapter slug as shown in the table of contents (e.g. 'chapter-6-character-options', or with '#Anchor' to start at a section)"),
+    section: z
+      .string()
+      .optional()
+      .describe("Start at this heading: its id or its title text (e.g. 'Cleric: Mind Domain')"),
+    offset: z
+      .number()
+      .int()
+      .min(0)
+      .optional()
+      .describe("Character offset to continue from, as given in the previous result"),
+    max_chars: z
+      .number()
+      .int()
+      .min(1000)
+      .max(50000)
+      .optional()
+      .describe("Maximum characters to return (default 12000)"),
   },
-  async ({ book_slug, chapter_slug }) => {
+  async ({ book_slug, chapter_slug, section, offset, max_chars }) => {
     try {
       const context = await getSharedContext();
-      const content = await readBook(context, book_slug, chapter_slug);
+      const content = await readBook(context, book_slug, chapter_slug, section, offset ?? 0, max_chars ?? 12000);
       return { content: [{ type: "text", text: content }] };
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);

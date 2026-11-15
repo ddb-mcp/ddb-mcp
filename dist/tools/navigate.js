@@ -5,8 +5,8 @@ export async function navigate(context, url) {
     if (!url.startsWith("https://www.dndbeyond.com") && !url.startsWith("https://dndbeyond.com")) {
         throw new Error("Only D&D Beyond URLs (https://www.dndbeyond.com/...) are supported.");
     }
-    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-    await page.waitForTimeout(1500);
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
+    await page.waitForTimeout(2000);
     // Extract page text content and convert to readable markdown-ish format
     const content = await page.evaluate(() => {
         // Remove scripts and styles
